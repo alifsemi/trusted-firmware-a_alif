@@ -13,11 +13,14 @@
 #if (PRELOADED_BL33_BASE == 0xE0000000)
 #define CARRIER
 #endif
+#if (PRELOADED_BL33_BASE == 0xD0000000)
+#define DEVBOARD
 #endif
-
+#endif
 
 void setup_PinMUX()
 {
+#if defined (DEVBOARD) || defined (CARRIER)
 #ifdef CARRIER
 	/* Configure OctalSPI 1 pins - CarrierBoard
 	*
@@ -76,6 +79,7 @@ void setup_PinMUX()
 
 	*PADCTRL_REG(1, 25) = PAD_CTRL_CLK;
 	*PADCTRL_REG(2, 6) = PAD_CTRL_CLK;
+#endif
 #endif
 return;
 }
@@ -399,6 +403,7 @@ int init_nor_flash(void)
 	dws->ds_en = 1;			/* DS signal Enabled */
 	dws->ddr_en = 0;        	/* DDR is Disabled for now */
 	dws->aes_en = 0;        	/* AES decrypt disable by default */
+
 #if ENABLE_AES != 0
 	{
 		dws->aes_en = 1;        		/* AES decrypt enable */
