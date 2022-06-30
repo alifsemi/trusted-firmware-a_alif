@@ -167,7 +167,24 @@ typedef struct {
 #define AES1_BASE		(volatile uint32_t *)0x49041000
 #define PINMUX_BASE		(volatile uint32_t *)0x71006000
 
-/* Flash Memory device constants */
+
+/* defines the Length of Address to be transmitted by Host controller */
+#define ADDR_LENGTH_0_BITS	0x0
+#define ADDR_LENGTH_8_BITS	0x2
+#define ADDR_LENGTH_24_BITS	0x6
+#define ADDR_LENGTH_32_BITS	0x8
+
+/* defines the mode in which the slave Device is operating in */
+#define DEVICE_MODE_SINGLE		1
+#define DEVICE_MODE_DUAL		2
+#define DEVICE_MODE_QUAD		4
+#define DEVICE_MODE_OCTAL		8
+
+/* defines the Slave Device */
+#define DEVICE_ADESTO_NOR_FLASH	1
+#define DEVICE_ISSI_NOR_FLASH	2
+
+/* Adesto Flash Memory device constants */
 #define FM_PAGE_SIZE		256
 
 #define FMC_READ_ARRAY		0x0B
@@ -217,6 +234,76 @@ typedef struct {
 #define FMC_ECHO_INVERTED	0xA5
 #define FMC_RETURN2SPI		0xFF
 
+
+/* ISSI Flash Memory device Commands */
+
+#define FM_PAGE_SIZE		256
+
+#define ISSI_RESET_ENABLE	0x66
+#define ISSI_RESET_MEMORY	0x99
+
+#define ISSI_READ_ID		0x9E
+#define ISSI_READ_MULTIPLE_ID	0x9F
+
+/* READ REGISTER OPERATIONS */
+#define ISSI_READ_STATUS_REG			0x05
+#define ISSI_READ_FLAG_STATUS_REG		0x70
+#define ISSI_READ_NONVOLATILE_CONFIG_REG	0xB5
+#define ISSI_READ_VOLATILE_CONFIG_REG		0x85
+#define ISSI_READ_PROTECTION_MANAGEMENT_REG	0x2B
+
+/* READ MEMORY OPERATIONS with 3-Byte/4-Byte Address */
+#define ISSI_READ				0x03
+#define ISSI_FAST_READ				0x0B
+#define ISSI_OCTAL_OUTPUT_FAST_READ		0x8B
+#define ISSI_OCTAL_IO_FAST_READ			0xCB
+#define ISSI_DDR_OCTAL_OUTPUT_FAST_READ		0x9D
+#define ISSI_DDR_OCTAL_IO_FAST_READ		0xFD
+
+/* READ MEMORY OPERATIONS with 4-Byte Address */
+#define ISSI_4BYTE_READ				0x13
+#define ISSI_4BYTE_FAST_READ			0x0C
+#define ISSI_4BYTE_OCTAL_OUTPUT_FAST_READ	0x7C
+#define ISSI_4BYTE_OCTAL_IO_FAST_READ		0xCC
+
+/* WRITE OPERATIONS */
+#define ISSI_WRITE_ENABLE	0x06
+#define ISSI_WRITE_DISABLE	0x04
+
+/* WRITE REGISTER OPERATIONS */
+#define ISSI_WRITE_STATUS_REG			0x01
+#define ISSI_WRITE_NONVOLATILE_CONFIG_REG	0xB1
+#define ISSI_WRITE_VOLATILE_CONFIG_REG		0x81
+#define ISSI_WRITE_PROTECTION_MANAGEMENT_REG	0x68
+
+/* CLEAR OPERATIONS */
+#define ISSI_CLEAR_FLAG_STATUS_REG	0x50
+#define ISSI_CLEAR_ERRB			0xB6
+
+/* PROGRAM OPERATIONS with 3-Byte/4-Byte Address */
+#define ISSI_PAGE_PROGRAM			0x02
+#define ISSI_OCTAL_INPUT_FAST_PROGRAM		0x82
+#define ISSI_EXTN_OCTAL_INPUT_FAST_PROGRAM	0xC2
+
+/* PROGRAM OPERATIONS with 4-Byte Address */
+#define ISSI_4BYTE_PAGE_PROGRAM				0x12
+#define ISSI_4BYTE_OCTAL_INPUT_FAST_PROGRAM		0x84
+#define ISSI_4BYTE_EXTN_OCTAL_INPUT_FAST_PROGRAM	0x8E
+
+/* ERASE OPERATIONS with 3-Byte/4-Byte Address */
+#define ISSI_4KB_ERASE		0x20
+#define ISSI_32KB_ERASE		0x52
+#define ISSI_128KB_ERASE	0xD8
+#define ISSI_CHIP_ERASE		0x60
+
+/* ERASE OPERATIONS with 4-Byte Address */
+#define ISSI_4BYTE_4KB_ERASE	0x5C
+#define ISSI_4BYTE_32KB_ERASE	0x21
+#define ISSI_4BYTE_128KB_ERASE	0xDC
+
+/* 4-Byte ADDRESS MODE OPERATIONS */
+#define ISSI_ENTER_4BYTE_ADDRESS_MODE	0xB7
+#define ISSI_EXIT_4BYTE_ADDRESS_MODE	0xE9
 
 /*Pad Control Register */
 #define PAD_CTRL_REN		0x01			/* Read Enable */
