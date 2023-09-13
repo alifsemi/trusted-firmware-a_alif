@@ -14,6 +14,7 @@ BL32_SOURCES		+=	lib/xlat_tables/aarch32/xlat_tables.c	\
 
 PLAT_INCLUDES		:=	-Iplat/alif/board/devkit_e7/common/include	\
 				-Iinclude/plat/alif/common	\
+				-Iplat/alif/common/drivers/ospi/
 
 NEED_BL32		:=	yes
 

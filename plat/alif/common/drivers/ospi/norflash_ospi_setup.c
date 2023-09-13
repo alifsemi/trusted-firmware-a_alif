@@ -17,7 +17,7 @@
 #if (PRELOADED_BL33_BASE == 0xE0000000)
 #define CARRIER
 #endif
-#if ((PRELOADED_BL33_BASE == 0xD0000000) || A1 == 1)
+#if ((PRELOADED_BL33_BASE == 0xD0000000) || B0 == 1)
 #define DEVBOARD
 #endif
 #endif
@@ -688,7 +688,7 @@ int init_nor_flash(void)
 #endif
 
 	setup_PinMUX();
-#if A1 == 0 /* A0 DEV or CARRIER board with Adesto Flash */
+#if B0 == 0 /* A0 DEV or CARRIER board with Adesto Flash */
 	dws->spi_ser = 1;
 	dws->xip_ser = 1;
 	dws->addrlen = ADDR_LENGTH_32_BITS;
@@ -710,7 +710,7 @@ int init_nor_flash(void)
 
 	/* Set DDR or SDR operating mode */
 	flash_set_Data_mode(dws);
-#else  /* A1 with ISSI NOR Flash */
+#else  /* B0 with ISSI NOR Flash */
 	dws->dev_type = DEVICE_ISSI_NOR_FLASH; /* Set slave device as ISSI */
 	dws->spi_ser = 1;
 	dws->xip_ser = 1;
