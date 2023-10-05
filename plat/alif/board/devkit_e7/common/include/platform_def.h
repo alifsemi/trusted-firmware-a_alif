@@ -43,6 +43,20 @@
 #define ARM_SYS_CNTREAD_BASE		UL(0x1A210000)
 #define ARM_SYS_TIMCTL_BASE		UL(0x1A220000)
 
+#define OSPI0_BASE_ADDR                (0x83000000)
+#define OSPI0_SIZE                     (0x1000)
+#define OSPI0_MAP_DEVICE               MAP_REGION_FLAT(                \
+                                               OSPI0_BASE_ADDR,        \
+                                               OSPI0_SIZE,             \
+                                               MT_DEVICE | MT_RW | MT_SECURE)
+
+#define AES0_BASE_ADDR                 (0x83001000)
+#define AES0_SIZE                      (0x1000)
+#define AES0_MAP_DEVICE                        MAP_REGION_FLAT(                \
+                                               AES0_BASE_ADDR,         \
+                                               AES0_SIZE,              \
+                                               MT_DEVICE | MT_RW | MT_SECURE)
+
 /* GIC related constants */
 #define PLAT_ALIF_GICD_BASE		UL(0x1C010000)
 #define PLAT_ALIF_GICC_BASE		UL(0x1C02F000)
