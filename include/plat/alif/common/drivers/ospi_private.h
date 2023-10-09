@@ -1,4 +1,4 @@
-/* Copyright (C) 2022 Alif Semiconductor - All Rights Reserved.
+/* Copyright (C) 2023 Alif Semiconductor - All Rights Reserved.
  * Use, distribution and modification of this code is permitted under the
  * terms stated in the Alif Semiconductor Software License Agreement
  *
@@ -9,7 +9,7 @@
  */
 
 /**************************************************************************//**
- * @file     dwc_ospi_private.h
+ * @file     ospi_private.h
  * @version  V1.0.0
  * @brief    Private header file for OSPI driver to set up flash in XIP mode.
  * @bug      None.
