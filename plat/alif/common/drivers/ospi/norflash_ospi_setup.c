@@ -8,6 +8,7 @@
  *
  */
 
+#include <common/debug.h>
 #include "dwc_spi.h"
 #include "ospi.h"
 #include "ospi_drv.h"
@@ -209,5 +210,6 @@ int init_nor_flash(void)
     {
          while(1);
     }
+    INFO("Configured OSPI NOR Flash successfully\n");
     return 0;
 }
