@@ -132,5 +132,7 @@ void plat_alif_sp_min_platform_setup(void)
 	ospi_hyperram_init();
 #endif
 
+#if FLASH_EN
 init_nor_flash();
+#endif
 }

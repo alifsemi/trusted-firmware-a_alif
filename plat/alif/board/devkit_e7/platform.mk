@@ -47,3 +47,5 @@ $(eval $(call add_define,ARM_LINUX_KERNEL_AS_BL33))
 
 # Adding TARGET_PLATFORM as a GCC define (-D option)
 $(eval $(call add_define,TARGET_PLATFORM_$(call uppercase,${TARGET_PLATFORM})))
+(eval $(call add_define,HYPRAM_EN))
+(eval $(call add_define,FLASH_EN))
