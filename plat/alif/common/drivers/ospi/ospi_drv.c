@@ -39,7 +39,7 @@ static void ospi_xip_disable(ospi_flash_cfg_t *ospi_cfg)
 static void ospi_xip_enable(ospi_flash_cfg_t *ospi_cfg)
 {
     ospi_cfg->aes_regs->aes_control |= AES_CONTROL_XIP_EN;
-#if OSPI_XIP_ENABLE_AES_DECRYPTION
+#if OSPI_XIP_ENABLE_AES_DECRYPTION || AES_EN
     ospi_cfg->aes_regs->aes_control |= (AES_CONTROL_LD_KEY | AES_CONTROL_DECRYPT_EN);
 #endif
 }

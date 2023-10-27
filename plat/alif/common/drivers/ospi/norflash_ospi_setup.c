@@ -26,6 +26,7 @@
 /* OSPI FLASH CONFIG */
 static ospi_flash_cfg_t ospi_flash_config;
 
+extern int service_ospi_write_aes_key(void);
 void static setup_PinMUX()
 {
 
@@ -203,12 +204,19 @@ int init_nor_flash(void)
     int ret;
 
     setup_PinMUX();
-
+#if AES_EN
+    if(service_ospi_write_aes_key())
+    {
+        ERROR("Unable to write OSPI AES KEY to AES decoder register\n");
+        return -1;
+    }
+#endif
     ret = setup_flash_xip();
 
     if (ret)
     {
-         while(1);
+        ERROR("Unable to set OSPI flash in XiP mode\n");
+        return -1;
     }
     INFO("Configured OSPI NOR Flash successfully\n");
     return 0;
