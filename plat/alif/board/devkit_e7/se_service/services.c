@@ -33,8 +33,8 @@ int service_ospi_write_aes_key(void)
 	heartbeat_req.hdr_service_id = SERVICE_MAINTENANCE_HEARTBEAT_ID;
 	INFO("Sending heartbeat messages for synchronization\n");
 	mhu_secure_message_start(PLAT_SDK700_MHU0_SEND, CH_ID);
+	/* Send the MHU message and wait for SE response at receiver channel*/
 	do {
-		INFO("heartbeat\n");
 		mhu_secure_message_send(PLAT_SDK700_MHU0_SEND, CH_ID,
 					(uint32_t)&heartbeat_req);
 		__asm__ __volatile__("dsb" ::: "memory");
