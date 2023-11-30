@@ -57,6 +57,41 @@
                                                AES0_SIZE,              \
                                                MT_DEVICE | MT_RW | MT_SECURE)
 
+#define OSPI1_BASE_ADDR			(0x83002000)
+#define OSPI1_SIZE			(0x1000)
+#define OSPI1_MAP_DEVICE		MAP_REGION_FLAT(		\
+						OSPI1_BASE_ADDR,	\
+						OSPI1_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
+
+#define AES1_BASE_ADDR			(0x83003000)
+#define AES1_SIZE			(0x1000)
+#define AES1_MAP_DEVICE			MAP_REGION_FLAT(		\
+						AES1_BASE_ADDR,		\
+						AES1_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
+
+#define SE_MHU0_SEND_ADDR               (0x1B800000)
+#define MHU0_SIZE                       (0x1000)
+#define SE_MHU0_SEND_DEVICE             MAP_REGION_FLAT(		\
+						SE_MHU0_SEND_ADDR,	\
+						MHU0_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
+
+#define SE_MHU0_RECV_ADDR               (0x1B810000)
+#define SE_MHU0_RECV_DEVICE             MAP_REGION_FLAT(		\
+						SE_MHU0_RECV_ADDR,	\
+						MHU0_SIZE,              \
+						MT_DEVICE | MT_RW | MT_SECURE)
+
+/* SRAM0 memory 0x02380000 - 0x02380FFF is used for MHU0 */
+/* communication with SE.*/
+#define MHU0_PAYLOAD_ADDR                       0x02380000
+#define MHU0_PAYLOAD_MAP                MAP_REGION_FLAT(		\
+						MHU0_PAYLOAD_ADDR,	\
+						0x1000,			\
+						MT_DEVICE | MT_RW | MT_SECURE)
+
 /* GIC related constants */
 #define PLAT_ALIF_GICD_BASE		UL(0x1C010000)
 #define PLAT_ALIF_GICC_BASE		UL(0x1C02F000)
@@ -66,8 +101,8 @@
  * different BL stages which need to be mapped in the MMU.
  */
 #define ARM_BL_REGIONS			3
-#define PLAT_ARM_MMAP_ENTRIES		8
-#define MAX_XLAT_TABLES			8
+#define PLAT_ARM_MMAP_ENTRIES		12
+#define MAX_XLAT_TABLES			12
 #define MAX_MMAP_REGIONS		(PLAT_ARM_MMAP_ENTRIES +        \
 					ARM_BL_REGIONS)
 

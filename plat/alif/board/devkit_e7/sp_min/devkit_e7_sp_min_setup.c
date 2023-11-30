@@ -133,6 +133,11 @@ void plat_alif_sp_min_platform_setup(void)
 #endif
 
 #if FLASH_EN
-init_nor_flash();
+	if (init_nor_flash()) {
+		ERROR("%s: OSPI1 NOR flash initialization failed\n",
+			 __func__);
+		panic();
+	}
+
 #endif
 }
