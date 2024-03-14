@@ -50,6 +50,12 @@
                                                OSPI0_SIZE,             \
                                                MT_DEVICE | MT_RW | MT_SECURE)
 
+#define LPGPIO_MAP_DEVICE              MAP_REGION_FLAT(                \
+                                               0x42002000,             \
+                                               0x1000,                 \
+                                               MT_DEVICE | MT_RW | MT_SECURE)
+
+
 #define AES0_BASE_ADDR                 (0x83001000)
 #define AES0_SIZE                      (0x1000)
 #define AES0_MAP_DEVICE                        MAP_REGION_FLAT(                \
@@ -101,8 +107,8 @@
  * different BL stages which need to be mapped in the MMU.
  */
 #define ARM_BL_REGIONS			3
-#define PLAT_ARM_MMAP_ENTRIES		12
-#define MAX_XLAT_TABLES			12
+#define PLAT_ARM_MMAP_ENTRIES		18
+#define MAX_XLAT_TABLES			13
 #define MAX_MMAP_REGIONS		(PLAT_ARM_MMAP_ENTRIES +        \
 					ARM_BL_REGIONS)
 
