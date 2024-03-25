@@ -26,6 +26,7 @@ const mmap_region_t plat_alif_mmap[] = {
 	SE_MHU0_SEND_DEVICE,
 	SE_MHU0_RECV_DEVICE,
 	MHU0_PAYLOAD_MAP,
+	LPGPIO_MAP_DEVICE,
 	{0}
 };
 

@@ -67,8 +67,9 @@ static int service_se_sync(void)
 		mhu_secure_message_send(PLAT_SDK700_MHU0_SEND, CH_ID,
 					(uint32_t)heartbeat_req);
 		dmb();
-		/* Call delay to make sure request is sent successfully */
-		delay_in_us(SYNC_DELAY);
+
+		/* Wait for SE to send response for the message sent */
+		delay_in_us(3 * SYNC_DELAY);
 	} while (((mmio_read_32(PLAT_SDK700_MHU0_SEND + CH_INT_ST0) &
 		(1 << CH_ID)) == 0x0) ||
 		((mmio_read_32(PLAT_SDK700_MHU0_SEND + CH_INT_ST) &
