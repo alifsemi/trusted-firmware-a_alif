@@ -1,0 +1,155 @@
+/*
+ * Copyright (c) 2025, Alif Semiconductor. All rights reserved.
+ *
+ * SPDX-License-Identifier: BSD-3-Clause
+ */
+
+#ifndef PLATFORM_DEF_H
+#define PLATFORM_DEF_H
+
+#include <lib/utils_def.h>
+#include <lib/xlat_tables/xlat_tables_defs.h>
+#include <plat/common/common_def.h>
+
+/* Core/Cluster/Thread counts for Devkit e7 */
+#define DEVKIT_E7_CLUSTER_COUNT		U(1)
+#define DEVKIT_E7_MAX_CPUS_PER_CLUSTER	U(2)
+#define DEVKIT_E7_MAX_PE_PER_CPU	U(1)
+
+#define PLAT_ALIF_CLUSTER_COUNT		DEVKIT_E7_CLUSTER_COUNT
+
+#define PLATFORM_CORE_COUNT		(PLAT_ALIF_CLUSTER_COUNT *       \
+					DEVKIT_E7_MAX_CPUS_PER_CLUSTER *   \
+					DEVKIT_E7_MAX_PE_PER_CPU)
+
+#define BL32_BASE			UL(0x08000000)
+#define BL32_LIMIT			UL(BL32_BASE + 0x20000)
+
+#define BL32_IN_XIP_MEM			1
+#define BL32_RO_BASE			UL(0x80002000)
+#define BL32_RO_LIMIT			UL(BL32_RO_BASE + 0x8000)
+#define BL32_RW_BASE			BL32_BASE
+#define BL32_RW_LIMIT			BL32_LIMIT
+/*
+ * Some data must be aligned on the biggest cache line size in the platform.
+ * This is known only to the platform as it might have a combination of
+ * integrated and external caches.
+ */
+#define CACHE_WRITEBACK_GRANULE		(U(1) << ARM_CACHE_WRITEBACK_SHIFT)
+#define ARM_CACHE_WRITEBACK_SHIFT	6
+
+/* Timer/watchdog related constants */
+#define ARM_SYS_CNTCTL_BASE		UL(0x1A200000)
+#define ARM_SYS_CNTREAD_BASE		UL(0x1A210000)
+#define ARM_SYS_TIMCTL_BASE		UL(0x1A220000)
+
+/* GIC related constants */
+#define PLAT_ALIF_GICD_BASE		UL(0x1C010000)
+#define PLAT_ALIF_GICC_BASE		UL(0x1C02F000)
+
+/*
+ * The max number of regions like RO(code), coherent and data required by
+ * different BL stages which need to be mapped in the MMU.
+ */
+#define ARM_BL_REGIONS			3
+#define PLAT_ARM_MMAP_ENTRIES		8
+#define MAX_XLAT_TABLES			8
+#define MAX_MMAP_REGIONS		(PLAT_ARM_MMAP_ENTRIES +        \
+					ARM_BL_REGIONS)
+
+#define PLAT_PHY_ADDR_SPACE_SIZE	(1ULL << 32)
+#define PLAT_VIRT_ADDR_SPACE_SIZE	(1ULL << 32)
+
+/*
+ * This macro defines the deepest retention state possible. A higher state
+ * ID will represent an invalid or a power down state.
+ */
+#define PLAT_MAX_RET_STATE		1
+
+/*
+ * This macro defines the deepest power down states possible. Any state ID
+ * higher than this is invalid.
+ */
+#define PLAT_MAX_OFF_STATE		2
+
+#define PLAT_MAX_PWR_LVL		2
+
+#define DEVKIT_E7_IRQ_TZ_WDOG		32
+#define DEVKIT_E7_IRQ_SEC_SYS_TIMER	34
+
+#define ARM_IRQ_SEC_PHY_TIMER		29
+
+#define ARM_IRQ_SEC_SGI_0		8
+#define ARM_IRQ_SEC_SGI_1		9
+#define ARM_IRQ_SEC_SGI_2		10
+#define ARM_IRQ_SEC_SGI_3		11
+#define ARM_IRQ_SEC_SGI_4		12
+#define ARM_IRQ_SEC_SGI_5		13
+#define ARM_IRQ_SEC_SGI_6		14
+#define ARM_IRQ_SEC_SGI_7		15
+
+/*
+ * Define a list of Group 0 interrupts.
+ */
+#define PLAT_ALIF_G0_IRQ_PROPS(grp)   	\
+	INTR_PROP_DESC(ARM_IRQ_SEC_PHY_TIMER, GIC_HIGHEST_SEC_PRIORITY, \
+		(grp), GIC_INTR_CFG_LEVEL), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_1, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_2, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_3, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_4, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_5, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_6, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(ARM_IRQ_SEC_SGI_7, GIC_HIGHEST_SEC_PRIORITY,	\
+		(grp), GIC_INTR_CFG_EDGE), \
+	INTR_PROP_DESC(DEVKIT_E7_IRQ_TZ_WDOG, GIC_HIGHEST_SEC_PRIORITY, \
+		(grp), GIC_INTR_CFG_LEVEL), \
+	INTR_PROP_DESC(DEVKIT_E7_IRQ_SEC_SYS_TIMER, GIC_HIGHEST_SEC_PRIORITY, \
+		(grp), GIC_INTR_CFG_LEVEL)
+
+#define PLATFORM_STACK_SIZE		UL(0x440)
+
+/* platform console parameters */
+#define PLAT_ALIF_BOOT_UART_BASE	UL(0x4901A000)
+#define PLAT_ALIF_BOOT_UART_CLK_IN_HZ	100000000
+#define PLAT_ALIF_CONSOLE_BAUDRATE	115200
+
+#define PLAT_ALIF_RUN_UART_BASE		UL(0x4901A000)
+#define PLAT_ALIF_RUN_UART_CLK_IN_HZ	100000000
+
+#define SYS_COUNTER_FREQ_IN_TICKS       UL(100000000) /* 100MHz */
+
+#define ARM_MAP_BL_RO			MAP_REGION_FLAT(		\
+						BL_CODE_BASE,		\
+						BL_CODE_END		\
+							- BL_CODE_BASE,	\
+						MT_CODE | MT_SECURE),	\
+					MAP_REGION_FLAT(		\
+						BL_RO_DATA_BASE,	\
+						BL_RO_DATA_END		\
+						- BL_RO_DATA_BASE,	\
+						MT_RO_DATA | MT_SECURE)
+
+#define DEVKIT_E7_DEVICE_BASE     	(0x1A000000)
+#define DEVKIT_E7_DEVICE_SIZE		(0x26000000)
+#define DEVKIT_E7_MAP_DEVICE		MAP_REGION_FLAT(                \
+                                                DEVKIT_E7_DEVICE_BASE,\
+                                                DEVKIT_E7_DEVICE_SIZE,\
+                                                MT_DEVICE | MT_RW | MT_SECURE)
+
+#define UART_SIZE			(0x1000)
+#define UART_MAP_DEVICE                 MAP_REGION_FLAT(                \
+                                                PLAT_ALIF_BOOT_UART_BASE,         \
+                                                UART_SIZE,              \
+                                                MT_DEVICE | MT_RW | MT_SECURE)
+#define EXPMST0_CTRL_REG		(0x4902F000)
+#define UART_CTRL_REG			(0x4902F008)
+#define PINMUX_BASE			(0x1A603000)
+#define LPGPIO_CTRL_BASE		(0x42007000)
+#endif /* PLATFORM_DEF_H */

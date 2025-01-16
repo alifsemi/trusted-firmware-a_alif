@@ -104,12 +104,27 @@ func sp_min_entrypoint
 		_init_c_runtime=1				\
 		_exception_vectors=sp_min_vector_table		\
 		_pie_fixup_size=FIXUP_SIZE
+	/* ---------------------------------------------------------------------
+	 * For RESET_TO_SP_MIN systems, BL32 (SP_MIN) is the first bootloader
+	 * to run so there's no argument to relay from a previous bootloader.
+	 * Zero the arguments passed to the platform layer to reflect that.
+	 * ---------------------------------------------------------------------
+	 */
+	mov	r9, #0
+	mov	r10, #0
+	mov	r11, #0
+	mov	r12, #0
 #endif /* RESET_TO_SP_MIN */
 
 #if SP_MIN_WITH_SECURE_FIQ
 	route_fiq_to_sp_min r4
 #endif
-
+#if BL32_IN_XIP_MEM
+	ldr	r0, =__DATA_START__
+	ldr	r1, =__DATA_ROM_START__
+	ldr	r2, =__DATA_SIZE__
+	bl	memcpy4
+#endif
 	/* ---------------------------------------------------------------------
 	 * Relay the previous bootloader's arguments to the platform layer
 	 * ---------------------------------------------------------------------
