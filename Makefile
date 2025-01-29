@@ -1243,6 +1243,7 @@ $(eval $(call assert_booleans,\
 	PSA_CRYPTO	\
 	ENABLE_CONSOLE_GETC \
 	INIT_UNUSED_NS_EL2	\
+	BL32_IN_XIP_MEM		\
 )))
 
 # Numeric_Flags
