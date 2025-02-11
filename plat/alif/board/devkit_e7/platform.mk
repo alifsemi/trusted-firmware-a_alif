@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #
+#
+
+$(eval $(call add_define,HYPRAM_EN))
+
 BL32_SOURCES		+=	lib/xlat_tables/aarch32/xlat_tables.c	\
 				lib/xlat_tables/xlat_tables_common.c	\
 				plat/alif/common/alif_common.c		\

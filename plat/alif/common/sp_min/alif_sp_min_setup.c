@@ -21,6 +21,7 @@ static entry_point_info_t bl33_image_ep_info;
 #pragma weak sp_min_platform_setup
 #pragma weak sp_min_plat_arch_setup
 #pragma weak plat_alif_sp_min_early_platform_setup
+#pragma weak plat_alif_sp_min_platform_setup
 
 #define MAP_BL_SP_MIN_TOTAL	MAP_REGION_FLAT(			\
 					BL32_BASE,			\
@@ -127,6 +128,9 @@ void sp_min_platform_setup(void)
 	mmio_write_32(ARM_SYS_CNTCTL_BASE + CNTCR_OFF,
 			CNTCR_FCREQ(0U) | CNTCR_EN);
 #endif
+
+	/* perform optional platform setup */
+	plat_alif_sp_min_platform_setup();
 }
 
 void sp_min_plat_runtime_setup(void)
