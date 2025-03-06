@@ -192,7 +192,7 @@
 						MT_RO_DATA | MT_SECURE)
 
 #define DEVKIT_E7_DEVICE_BASE     	(0x1A000000)
-#define DEVKIT_E7_DEVICE_SIZE		(0x26000000)
+#define DEVKIT_E7_DEVICE_SIZE		(0x6000000)
 #define DEVKIT_E7_MAP_DEVICE		MAP_REGION_FLAT(                \
                                                 DEVKIT_E7_DEVICE_BASE,\
                                                 DEVKIT_E7_DEVICE_SIZE,\
