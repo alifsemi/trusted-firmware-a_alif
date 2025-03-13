@@ -152,4 +152,21 @@
 #define UART_CTRL_REG			(0x4902F008)
 #define PINMUX_BASE			(0x1A603000)
 #define LPGPIO_CTRL_BASE		(0x42007000)
+#define OSPI0_BASE			(0x83000000)
+#define OSPI1_BASE			(0x83002000)
+#define AES0_BASE			(0x83001000)
+#define AES1_BASE			(0x83003000)
+
+#define OSPI_SIZE			0x4000
+
+#define OSPI_MAP_DEVICE                 MAP_REGION_FLAT(                \
+                                                OSPI0_BASE,         	\
+                                                OSPI_SIZE,              \
+                                                MT_DEVICE | MT_RW | MT_SECURE)
+
+#define GPIO_MAP_DEVICE                 MAP_REGION_FLAT(                \
+                                                0x42002000,         	\
+                                                0x8000,              	\
+                                                MT_DEVICE | MT_RW | MT_SECURE)
+
 #endif /* PLATFORM_DEF_H */

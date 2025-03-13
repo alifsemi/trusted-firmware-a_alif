@@ -13,6 +13,8 @@
 const mmap_region_t plat_alif_mmap[] = {
 	DEVKIT_E7_MAP_DEVICE,
 	UART_MAP_DEVICE,
+	OSPI_MAP_DEVICE,
+	GPIO_MAP_DEVICE,
 	{0}
 };
 

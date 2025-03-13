@@ -43,6 +43,8 @@ uint32_t plat_alif_calc_core_pos(u_register_t mpidr);
 void plat_alif_sp_min_early_platform_setup(u_register_t arg0, u_register_t arg1,
 			u_register_t arg2, u_register_t arg3);
 
+
+void plat_alif_sp_min_platform_setup(void);
 /* Allow platform to override psci_pm_ops during runtime */
 const plat_psci_ops_t *plat_alif_psci_override_pm_ops(plat_psci_ops_t *ops);
 
