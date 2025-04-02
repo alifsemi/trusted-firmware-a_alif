@@ -66,3 +66,6 @@ $(eval $(call add_define,ARM_LINUX_KERNEL_AS_BL33))
 
 # Adding TARGET_PLATFORM as a GCC define (-D option)
 $(eval $(call add_define,TARGET_PLATFORM_$(call uppercase,${TARGET_PLATFORM})))
+
+# Making Trusted SRAM Base as configurable
+$(eval $(call add_define,ALIF_TRUSTED_SRAM_BASE))
