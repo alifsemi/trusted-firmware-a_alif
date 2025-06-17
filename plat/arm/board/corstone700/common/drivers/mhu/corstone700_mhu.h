@@ -18,6 +18,11 @@
 #define MHU_V2_ACCESS_REQ_OFFSET		0xF88
 #define MHU_V2_ACCESS_READY_OFFSET		0xF8C
 
+/* MHUv2 Secure Channel receiver and sender */
+#define PLAT_SDK700_MHU0_SEND           0x1B800000
+#define PLAT_SDK700_MHU0_RECV           0x1B810000
+#define CH_ID                           0
+
 #define MHU_V2_ACCESS_REQUEST(addr)     \
 	mmio_write_32((addr) + MHU_V2_ACCESS_REQ_OFFSET, 0x1)
 

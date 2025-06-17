@@ -1,4 +1,4 @@
-/* Copyright (C) 2024 Alif Semiconductor - All Rights Reserved.
+/* Copyright (C) 2025 Alif Semiconductor - All Rights Reserved.
  * Use, distribution and modification of this code is permitted under the
  * terms stated in the Alif Semiconductor Software License Agreement
  *
@@ -11,7 +11,6 @@
 #include <common/debug.h>
 #include <lib/mmio.h>
 #include "dwc_spi.h"
-#include "ospi.h"
 #include "ospi_drv.h"
 #include "ospi_xip_user.h"
 
@@ -33,7 +32,7 @@
 static ospi_flash_cfg_t ospi_flash_config;
 
 extern int service_ospi_write_aes_key(void);
-void static setup_PinMUX()
+void  setup_PinMUX()
 {
 	uint32_t value;
 

@@ -8,12 +8,12 @@
  *
  */
 #include <platform_def.h>
-#include <mhu.h>
 #include <lib/mmio.h>
 #include <common/debug.h>
 #include <arch_helpers.h>
 #include "services_lib_protocol.h"
 #include "services_lib_ids.h"
+#include <corstone700_mhu.h>
 
 #define AES_ENC_KEY_LEN                 16
 /**
@@ -120,6 +120,7 @@ int service_ospi_write_aes_key(void)
 			SERVICE_APPLICATION_OSPI_WRITE_KEY_ID;
 	mhu_secure_message_send(PLAT_SDK700_MHU0_SEND, CH_ID,
 				(uint32_t) ospi1_write_key);
+		delay_in_us(3 * SYNC_DELAY);
 	dmb();
 
 	/* Delay to make sure SE service request is sent successfully */
