@@ -19,6 +19,8 @@
 #define GPIO_PIN_DIRECTION_OUTPUT       1
 #define OSPI_RESET_PIN                  6
 
+extern int init_nor_flash(void);
+
 #if HYPRAM_EN
 static void set_actlr_radis(void)
 {
@@ -128,5 +130,14 @@ void plat_alif_sp_min_platform_setup(void)
 {
 #if HYPRAM_EN
 	ospi_hyperram_init();
+#endif
+
+#if FLASH_EN
+	if (init_nor_flash()) {
+		ERROR("%s: OSPI1 NOR flash initialization failed\n",
+			 __func__);
+		panic();
+	}
+
 #endif
 }

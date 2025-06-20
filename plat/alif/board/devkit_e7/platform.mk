@@ -6,14 +6,34 @@
 #
 
 $(eval $(call add_define,HYPRAM_EN))
+$(eval $(call add_define,FLASH_EN))
+$(eval $(call add_define,AES_EN))
+
+ifeq "1" "${AES_EN}"
+ifneq "1" "${FLASH_EN}"
+$(error AES_EN is set to 1 but not FLASH_EN. Set FLASH_EN to 1)
+endif
+ifeq "" "${AES_ENC_KEY}"
+$(error AES_EN is set to 1 but AES_ENC_KEY is empty.Set AES key in AES_ENC_KEY)
+endif
+endif
+CPPFLAGS		+= -DAES_ENC_KEY=\"${AES_ENC_KEY}\"
 
 BL32_SOURCES		+=	lib/xlat_tables/aarch32/xlat_tables.c	\
 				lib/xlat_tables/xlat_tables_common.c	\
 				plat/alif/common/alif_common.c		\
-				lib/cpus/aarch32/cortex_a32.S
+				lib/cpus/aarch32/cortex_a32.S		\
+				plat/alif/board/devkit_e7/se_service/services.c		\
+				plat/arm/board/corstone700/common/drivers/mhu/corstone700_mhu.c
 
 PLAT_INCLUDES		:=	-Iplat/alif/board/devkit_e7/common/include	\
-				-Iinclude/plat/alif/common	\
+				-Iinclude/plat/alif/common			\
+				-Iplat/alif/common/drivers/ospi			\
+				-Iplat/alif/board/devkit_e7/se_service		\
+				-Iplat/arm/board/corstone700/common/include 	\
+				-Iplat/arm/board/corstone700/common/drivers/mhu \
+				-Iinclude/plat/arm/common 			\
+				-Iinclude/plat/alif/common/drivers
 
 NEED_BL32		:=	yes
 
