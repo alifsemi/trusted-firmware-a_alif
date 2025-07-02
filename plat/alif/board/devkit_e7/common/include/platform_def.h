@@ -98,6 +98,12 @@
 						0x1000,			\
 						MT_DEVICE | MT_RW | MT_SECURE)
 
+#define CLKCTL_SLV_ADDR			(0x4902F000)
+#define CLKCTL_SIZE			(0x1000)
+#define CLKCTL_SLV_MAP_DEVICE		MAP_REGION_FLAT(		\
+						CLKCTL_SLV_ADDR,		\
+						CLKCTL_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
 /* GIC related constants */
 #define PLAT_ALIF_GICD_BASE		UL(0x1C010000)
 #define PLAT_ALIF_GICC_BASE		UL(0x1C02F000)

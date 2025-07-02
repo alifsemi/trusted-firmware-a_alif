@@ -45,10 +45,10 @@ void  setup_PinMUX()
 	*PADCTRL_REG(10, 2, PAD_CTRL_DATA, 1);
 	*PADCTRL_REG(10, 3, PAD_CTRL_DATA, 1);
 	*PADCTRL_REG(10, 4, PAD_CTRL_DATA, 1);
-	*PADCTRL_REG(10, 7, PAD_CTRL_DATA, 1);
+	*PADCTRL_REG(10, 7, PAD_CTRL_DATA, 7);
 	*PADCTRL_REG(5, 5, PAD_CTRL_CLK, 1);
 	*PADCTRL_REG(5, 7, PAD_CTRL_12MA, 1);
-	*PADCTRL_REG(5, 6, PAD_CTRL_DATA, 1);
+	*PADCTRL_REG(9, 0, PAD_CTRL_DATA, 1);
 	*PADCTRL_REG(8, 0, PAD_CTRL_12MA, 1);
 
 	/* initialize */
@@ -144,8 +144,6 @@ static void issi_flash_set_configuration_register_SDR(ospi_flash_cfg_t *ospi_cfg
 	issi_write_enable(ospi_cfg);
 	ospi_setup_write_sdr(ospi_cfg, ADDR_LENGTH_24_BITS);
 	ospi_push(ospi_cfg, cmd);
-	ospi_push(ospi_cfg, 0x00);
-	ospi_push(ospi_cfg, 0x00);
 	ospi_push(ospi_cfg, address);
 	ospi_send(ospi_cfg, value);
 }
@@ -245,6 +243,6 @@ int init_nor_flash(void)
 		ERROR("Unable to set OSPI flash in XiP mode\n");
 		return -1;
 	}
-	INFO("Configured OSPI NOR Flash successfully\n");
+	INFO("Configured OSPI1 NOR Flash successfully\n");
 	return 0;
 }
