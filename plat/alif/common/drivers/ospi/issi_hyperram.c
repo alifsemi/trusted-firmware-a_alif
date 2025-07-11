@@ -39,6 +39,7 @@ void hyper_ram_xip_init(ospi_cfg_t *ospi)
 	ospi_enable(ospi);
 
 	ospi->aes_regs->aes_control |= AES_CONTROL_XIP_EN;
+	ospi->aes_regs->aes_rxds_delay = 6;
 }
 
 //write 16bit data into the configuration register 0 of the ISSI device
