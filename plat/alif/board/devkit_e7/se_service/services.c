@@ -69,7 +69,7 @@ static int service_se_sync(void)
 		dmb();
 
 		/* Wait for SE to send response for the message sent */
-		delay_in_us(3 * SYNC_DELAY);
+		delay_in_us(SYNC_DELAY);
 	} while (((mmio_read_32(PLAT_SDK700_MHU0_SEND + CH_INT_ST0) &
 		(1 << CH_ID)) == 0x0) ||
 		((mmio_read_32(PLAT_SDK700_MHU0_SEND + CH_INT_ST) &
@@ -86,7 +86,7 @@ static int service_se_sync(void)
 	delay_in_us(READ_DELAY);
 	mmio_write_32(PLAT_SDK700_MHU0_RECV + CH_CLR, 0xFFFFFFFF);
 
-	INFO("Sync with SE successful\n");
+	INFO("OSPI1-FLASH: Sync with SE successful\n");
 	return 0;
 }
 
@@ -120,8 +120,7 @@ int service_ospi_write_aes_key(void)
 			SERVICE_APPLICATION_OSPI_WRITE_KEY_ID;
 	mhu_secure_message_send(PLAT_SDK700_MHU0_SEND, CH_ID,
 				(uint32_t) ospi1_write_key);
-		delay_in_us(3 * SYNC_DELAY);
-	dmb();
+	delay_in_us(3 * SYNC_DELAY);
 
 	/* Delay to make sure SE service request is sent successfully */
 	delay_in_us(READ_DELAY);

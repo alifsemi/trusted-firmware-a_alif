@@ -22,7 +22,7 @@
 					DEVKIT_E7_MAX_CPUS_PER_CLUSTER *   \
 					DEVKIT_E7_MAX_PE_PER_CPU)
 
-#define BL32_BASE			UL(0x08000000)
+#define BL32_BASE			ALIF_TRUSTED_SRAM_BASE
 #define BL32_LIMIT			UL(BL32_BASE + 0x20000)
 
 #define BL32_IN_XIP_MEM			1
@@ -98,6 +98,12 @@
 						0x1000,			\
 						MT_DEVICE | MT_RW | MT_SECURE)
 
+#define CLKCTL_SLV_ADDR			(0x4902F000)
+#define CLKCTL_SIZE			(0x1000)
+#define CLKCTL_SLV_MAP_DEVICE		MAP_REGION_FLAT(		\
+						CLKCTL_SLV_ADDR,		\
+						CLKCTL_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
 /* GIC related constants */
 #define PLAT_ALIF_GICD_BASE		UL(0x1C010000)
 #define PLAT_ALIF_GICC_BASE		UL(0x1C02F000)
@@ -192,7 +198,7 @@
 						MT_RO_DATA | MT_SECURE)
 
 #define DEVKIT_E7_DEVICE_BASE     	(0x1A000000)
-#define DEVKIT_E7_DEVICE_SIZE		(0x26000000)
+#define DEVKIT_E7_DEVICE_SIZE		(0x6000000)
 #define DEVKIT_E7_MAP_DEVICE		MAP_REGION_FLAT(                \
                                                 DEVKIT_E7_DEVICE_BASE,\
                                                 DEVKIT_E7_DEVICE_SIZE,\

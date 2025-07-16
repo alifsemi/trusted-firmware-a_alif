@@ -11,9 +11,9 @@
 #include <stdint.h>
 
 /* Write to the configuration register 0 of the ISSI hyperram device */
-void hyper_ram_write_conf_reg0(ospi_cfg_t *ospi, uint16_t data);
+int hyper_ram_write_conf_reg0(ospi_cfg_t *ospi, uint16_t data);
 
 /* Initialize hyperram xip mode */
-void hyper_ram_xip_init(ospi_cfg_t *ospi);
+int hyper_ram_xip_init(ospi_cfg_t *ospi);
 #endif /* ISSI_HYPERRAM_H */
 

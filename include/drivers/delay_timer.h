@@ -25,6 +25,7 @@ typedef struct timer_ops {
 	uint32_t (*get_timer_value)(void);
 	uint32_t clk_mult;
 	uint32_t clk_div;
+	int	(*delay)(uint32_t);
 } timer_ops_t;
 
 static inline uint64_t timeout_cnt_us2cnt(uint32_t us)

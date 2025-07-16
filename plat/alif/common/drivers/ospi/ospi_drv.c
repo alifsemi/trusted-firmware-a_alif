@@ -266,7 +266,6 @@ void ospi_xip_enter(ospi_flash_cfg_t *ospi_cfg, uint16_t incr_command, uint16_t 
     ospi_writel(ospi_cfg, xip_mode_bits, 0x0);
     ospi_writel(ospi_cfg, xip_incr_inst, incr_command);
     ospi_writel(ospi_cfg, xip_wrap_inst, wrap_command);
-    ospi_writel(ospi_cfg, xip_ser, ospi_cfg->ser);
 
     spi_enable(ospi_cfg);
     ospi_xip_enable(ospi_cfg);
