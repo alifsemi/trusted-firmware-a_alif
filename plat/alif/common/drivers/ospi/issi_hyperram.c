@@ -90,9 +90,9 @@ int hyper_ram_xip_init(ospi_cfg_t *ospi)
     if (ospi->aes_regs != NULL) {
         ospi->aes_regs->aes_control |= AES_CONTROL_XIP_EN;
 	ospi->aes_regs->aes_rxds_delay = 6;
-        INFO("ISSI HyperRAM: XIP mode enabled with AES support\n");
-    } else {
         INFO("ISSI HyperRAM: XIP mode enabled\n");
+    } else {
+        ERROR("ISSI HyperRAM: XIP mode failed to enable with AES Support\n");
     }
 
     return ret;
