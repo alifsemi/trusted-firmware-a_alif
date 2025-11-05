@@ -90,6 +90,12 @@
 						MHU0_SIZE,              \
 						MT_DEVICE | MT_RW | MT_SECURE)
 
+#define NPU_HG_ADDR			(0x49042000)
+#define NPUHG_SIZE                      (0x2000)
+#define NPU_HG_MAP_DEVICE		MAP_REGION_FLAT(		\
+						NPU_HG_ADDR,		\
+						NPUHG_SIZE,		\
+						MT_DEVICE | MT_RW | MT_SECURE)
 /* SRAM0 memory 0x02380000 - 0x02380FFF is used for MHU0 */
 /* communication with SE.*/
 #define MHU0_PAYLOAD_ADDR                       0x02380000

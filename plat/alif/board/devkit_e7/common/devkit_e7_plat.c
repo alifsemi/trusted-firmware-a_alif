@@ -33,6 +33,7 @@ const mmap_region_t plat_alif_mmap[] = {
     MHU0_PAYLOAD_MAP,
     LPGPIO_MAP_DEVICE,
     CLKCTL_SLV_MAP_DEVICE,
+    NPU_HG_MAP_DEVICE,
     {0} /* Null terminator */
 };
 

@@ -17,6 +17,15 @@
 #define LPGPIO_BASE                     0x42002000UL
 #define PERIPH_CLK_ENA                  0x4902F03C
 
+/* NPU-HG Registers */
+#define NPUHG_CMD			0x8U
+#define NPUHG_RESET			0xCU
+
+#define POWER_Q_ENABLE			BIT(3)
+#define CLOCK_Q_ENABLE			BIT(2)
+#define PENDING_CSL			BIT(1)
+#define PENDING_CPL			BIT(0)
+
 /* GPIO configuration */
 #define GPIO_PIN_DIRECTION_INPUT        0
 #define GPIO_PIN_DIRECTION_OUTPUT       1
@@ -167,6 +176,8 @@ void plat_alif_sp_min_early_platform_setup(u_register_t arg0, u_register_t arg1,
  */
 void plat_alif_sp_min_platform_setup(void)
 {
+    uint32_t value;
+
 #if HYPRAM_EN
     /* Initialize HyperRAM if enabled */
     ospi_hyperram_init();
@@ -179,4 +190,15 @@ void plat_alif_sp_min_platform_setup(void)
         panic();
     }
 #endif
+
+    /* set the NPU-HG in Non-secure, usermode state */
+    value = mmio_read_32(NPU_HG_ADDR + NPUHG_RESET);
+    value |= PENDING_CSL;
+    value &= ~PENDING_CPL;
+    mmio_write_32((NPU_HG_ADDR + NPUHG_RESET), value);
+
+    value = mmio_read_32(NPU_HG_ADDR + NPUHG_CMD);
+    value |= POWER_Q_ENABLE;
+    value |= CLOCK_Q_ENABLE;
+    mmio_write_32((NPU_HG_ADDR + NPUHG_CMD), value);
 }
