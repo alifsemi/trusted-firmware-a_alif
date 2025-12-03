@@ -51,7 +51,7 @@ int32_t pinconf_set(const uint8_t port, const uint8_t pin, const uint8_t alt_fun
 {
     uint32_t offset;
 
-    if ((port > PORT_15) || (pin > PIN_7))
+    if ((port > PORT_LP))
     {
         return -1;
     }
@@ -90,7 +90,7 @@ int32_t pinconf_get(const uint8_t port, const uint8_t pin, uint8_t *alt_func, ui
 {
     uint32_t offset, val;
 
-    if ((port > PORT_15) || (pin > PIN_7) || (alt_func == NULL) || (pad_ctrl == NULL))
+    if ((port > PORT_LP) || (alt_func == NULL) || (pad_ctrl == NULL))
     {
         return -1;
     }

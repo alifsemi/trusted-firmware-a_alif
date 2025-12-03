@@ -69,11 +69,9 @@ typedef struct {
 	volatile uint32_t  aes_control;		/* AES Control Register (0x0)			*/
 	volatile uint32_t  aes_interrupt;	/* AES Interrupt Control Register (0x4)		*/
 	volatile uint32_t  aes_interrupt_mask;  /* AES Interrupt Mask Register (0x8)		*/
-	volatile uint32_t  aes_key_0;		/* AES Key 0 Register (0xC)			*/
-	volatile uint32_t  aes_key_1;		/* AES Key 1 Register (0x10)			*/
-	volatile uint32_t  aes_key_2;		/* AES Key 2 Register (0x14)			*/
-	volatile uint32_t  aes_key_3;		/* AES Key 3 Register (0x18)			*/
-	volatile uint32_t  aes_timeout_val;	/* Reserved           (0x1C)			*/
+	volatile uint32_t  aes_clk_dis;		/* AES Clock Disable Register (0xC) - E8 only	*/
+	volatile uint32_t  aes_addr_control;	/* AES Address Control Register (0x10) - E8 only */
+	volatile uint32_t  reserved[3];		/* Reserved (0x14, 0x18, 0x1C)			*/
 	volatile uint32_t  aes_rxds_delay;	/* AES RXDS Delay Register (0x20)		*/
 } aes_regs_t;
 

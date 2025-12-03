@@ -10,32 +10,29 @@
 #include <drivers/delay_timer.h>
 #include <plat/alif/common/drivers/pinconf.h>
 #include <plat/alif/common/drivers/ospi.h>
+#include <plat/alif/common/drivers/ap_memory_hyperram.h>
 #include <plat/alif/common/drivers/issi_hyperram.h>
 #include <arch_helpers.h>
+#include <lib/utils_def.h>
 
 /* Base addresses */
 #define LPGPIO_BASE                     0x42002000UL
 #define PERIPH_CLK_ENA                  0x4902F03C
 
 /* NPU-HG Registers */
-#define NPUHG_CMD			0x8U
-#define NPUHG_RESET			0xCU
+#define NPUHG_CMD                       0x8U
+#define NPUHG_RESET                     0xCU
 
-#define POWER_Q_ENABLE			BIT(3)
-#define CLOCK_Q_ENABLE			BIT(2)
-#define PENDING_CSL			BIT(1)
-#define PENDING_CPL			BIT(0)
-
-/* GPIO configuration */
-#define GPIO_PIN_DIRECTION_INPUT        0
-#define GPIO_PIN_DIRECTION_OUTPUT       1
-#define OSPI_RESET_PIN                  6
+#define POWER_Q_ENABLE                  BIT(3)
+#define CLOCK_Q_ENABLE                  BIT(2)
+#define PENDING_CSL                     BIT(1)
+#define PENDING_CPL                     BIT(0)
 
 /* Clock enable bits */
 #define PERIPH_CLK_ENA_OSPI0_CKEN       BIT(0)
 #define PERIPH_CLK_ENA_OSPI1_CKEN       BIT(1)
 
-/* HyperRAM configuration */
+/* ISS HyperRAM configuration */
 #define HYPRAM_CONFIG_REG0_VALUE        0x8f1d  /* 64-byte wrap length */
 
 /* External declarations */
@@ -83,9 +80,9 @@ static void devkit_e7_devices_init(void)
     devkit_e7_pinmux_init();
 }
 
-#if HYPRAM_EN
+#if ISSI_HYPERRAM_EN
 /**
- * @brief Configure HyperRAM OSPI pins
+ * @brief Configure ISS HyperRAM OSPI pins
  */
 static void hyperram_pinmux_config(void)
 {
@@ -107,8 +104,8 @@ static void hyperram_pinmux_config(void)
 }
 
 /**
- * @brief Initialize OSPI controller for HyperRAM
- * 
+ * @brief Initialize OSPI controller for ISS HyperRAM
+ *
  * @param ospi_cfg Pointer to OSPI configuration structure
  */
 static void ospi_controller_init(ospi_cfg_t *ospi_cfg)
@@ -127,9 +124,9 @@ static void ospi_controller_init(ospi_cfg_t *ospi_cfg)
 }
 
 /**
- * @brief Configures and initializes the HyperRAM via OSPI interface.
+ * @brief Configures and initializes the ISS HyperRAM via OSPI interface.
  */
-static void ospi_hyperram_init(void)
+static void iss_hyperram_init(void)
 {
     static ospi_cfg_t ospi_cfg;
     int ret;
@@ -154,9 +151,9 @@ static void ospi_hyperram_init(void)
         panic();
     }
 
-    INFO("HyperRAM initialized successfully\n");
+    INFO("ISSI HyperRAM initialized successfully\n");
 }
-#endif /* HYPRAM_EN */
+#endif /* ISSI_HYPERRAM_EN */
 
 /**
  * @brief Early platform setup called before secure payload is loaded.
@@ -178,9 +175,15 @@ void plat_alif_sp_min_platform_setup(void)
 {
     uint32_t value;
 
-#if HYPRAM_EN
-    /* Initialize HyperRAM if enabled */
-    ospi_hyperram_init();
+#if ISSI_HYPERRAM_EN
+    /* Initialize ISS HyperRAM */
+    iss_hyperram_init();
+#elif AP_HYPERRAM_EN
+    /* Initialize AP Memory HyperRAM */
+    if (ap_memory_hyperram_init() != 0) {
+        ERROR("AP Memory: APS512Mb HyperRAM initialization failed\n");
+        panic();
+    }
 #endif
 
 #if FLASH_EN

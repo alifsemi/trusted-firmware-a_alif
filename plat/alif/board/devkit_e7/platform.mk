@@ -5,10 +5,10 @@
 #
 #
 
-$(eval $(call add_define,HYPRAM_EN))
+$(eval $(call add_define,ISSI_HYPERRAM_EN))
 $(eval $(call add_define,FLASH_EN))
 $(eval $(call add_define,AES_EN))
-$(eval $(call add_define,HYPRAM_EN))
+$(eval $(call add_define,AP_HYPERRAM_EN))
 
 ifeq "1" "${AES_EN}"
 ifneq "1" "${FLASH_EN}"

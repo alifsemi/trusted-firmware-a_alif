@@ -33,7 +33,9 @@ extern "C"
 #define PORT_13                                             13
 #define PORT_14                                             14
 #define PORT_15                                             15
-#define PORT_LP                                             PORT_15  /* PORT 15 name Alias */
+#define PORT_16                                             16
+#define PORT_17                                             17
+#define PORT_LP                                             PORT_17  /* PORT 17 name Alias */
 
 #define PIN_0                                               0U
 #define PIN_1                                               1U
