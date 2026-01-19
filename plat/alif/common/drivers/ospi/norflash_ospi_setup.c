@@ -237,12 +237,11 @@ int init_nor_flash(void)
 	}
 #endif
 	ret = setup_flash_xip();
-	INFO("setup_flash_xip is done\n");
 
 	if (ret) {
-		ERROR("Unable to set OSPI flash in XiP mode\n");
+		ERROR("ISSI: Unable to set OSPI flash in XiP mode\n");
 		return -1;
 	}
-	INFO("Configured OSPI1 NOR Flash successfully\n");
+	INFO("ISSI: Configured OSPI1 NOR Flash successfully\n");
 	return 0;
 }

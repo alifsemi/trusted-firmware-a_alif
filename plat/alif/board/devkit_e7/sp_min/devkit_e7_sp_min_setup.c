@@ -37,6 +37,7 @@
 
 /* External declarations */
 extern int init_nor_flash(void);
+extern int init_mx_nor_flash_dtr(void);
 
 /**
  * @brief Initialize platform clocks
@@ -186,10 +187,16 @@ void plat_alif_sp_min_platform_setup(void)
     }
 #endif
 
-#if FLASH_EN
-    /* Initialize NOR flash if enabled */
+#if ISSI_FLASH_EN
+    /* ISSI: Initialize NOR flash if enabled */
     if (init_nor_flash() != 0) {
-        ERROR("OSPI1 NOR flash initialization failed\n");
+	ERROR("ISSI: OSPI1 NOR flash initialization failed\n");
+	panic();
+	}
+#elif MX_FLASH_EN
+    /* Macronix: Initialize NOR flash if enabled */
+    if (init_mx_nor_flash_dtr() != 0) {
+        ERROR("MX: OSPI1 NOR flash initialization failed\n");
         panic();
     }
 #endif

@@ -6,13 +6,16 @@
 #
 
 $(eval $(call add_define,ISSI_HYPERRAM_EN))
-$(eval $(call add_define,FLASH_EN))
+$(eval $(call add_define,ISSI_FLASH_EN))
+$(eval $(call add_define,MX_FLASH_EN))
 $(eval $(call add_define,AES_EN))
 $(eval $(call add_define,AP_HYPERRAM_EN))
 
 ifeq "1" "${AES_EN}"
-ifneq "1" "${FLASH_EN}"
-$(error AES_EN is set to 1 but not FLASH_EN. Set FLASH_EN to 1)
+ifneq "1" "${ISSI_FLASH_EN}"
+ifneq "1" "${MX_FLASH_EN}"
+$(error AES_EN is set to 1 but neither ISSI_FLASH_EN nor MX_FLASH_EN is set. Set either ISSI_FLASH_EN or MX_FLASH_EN to 1)
+endif
 endif
 ifeq "" "${AES_ENC_KEY}"
 $(error AES_EN is set to 1 but AES_ENC_KEY is empty.Set AES key in AES_ENC_KEY)

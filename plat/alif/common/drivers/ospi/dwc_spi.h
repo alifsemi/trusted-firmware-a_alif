@@ -61,4 +61,7 @@
 /* Init Flash and set to XiP Mode */
 int init_nor_flash(void);
 
+/* Init Macronix MX66UW1G45G Flash in OPI DTR mode and set to XiP Mode */
+int init_mx_nor_flash_dtr(void);
+
 #endif //DWC_SPI_H
