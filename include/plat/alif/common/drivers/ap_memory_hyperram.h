@@ -12,14 +12,14 @@
 /**
  * @brief Initialize AP Memory APS512Mb PSRAM via OSPI0
  *
- * This function initializes the APS512Mb PSRAM connected via OSPI0 interface:
- * - Configures pinmux for OSPI signals (D0-D15, CLK, CS, DQS)
+ * This function initializes the APS512XXN-OB9-BG PSRAM connected via OSPI0 interface:
+ * - Configures pinmux for OSPI signals (D0-D7 for octal and D0-D15 for dual-octal, SCLK, SCLKN, CS, RESETn, RXDS)
  * - Initializes OSPI controller with proper timing
  * - Configures AES RXDS delay for DDR mode
- * - Performs global reset of PSRAM
+ * - Performs hardware and global reset of PSRAM
  * - Verifies device ID
  * - Configures read/write wait cycles
- * - Enables dual-octal mode (x16 data bus)
+ * - Configures x8 octal and x16 dual-octal DDR mode
  * - Configures XIP mode for memory-mapped access
  *
  * After initialization, PSRAM is accessible at XIP base address 0xA0000000

@@ -22,6 +22,10 @@
 #include <arch_helpers.h>
 #include <lib/utils_def.h>
 
+/* AP Memory Bus Width Configuration */
+#define AP_MEMORY_BUS_WIDTH_8BIT    8
+#define AP_MEMORY_BUS_WIDTH_16BIT   16
+
 /* APS512Mb PSRAM Constants */
 #define APS512Mb_ID                           0xDE
 #define APS512Mb_CMD_SYNC_READ                0x00
@@ -55,15 +59,14 @@
 #define APS512Mb_MODE_REG8_TRANSFER_MODE      6
 #define APS512Mb_MODE_REG8_RBX_READ_EN        3
 #define APS512Mb_MODE_REG8_BURST_TYPE         2
-#define APS512Mb_MODE_REG8_BURST_LEN          0
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
+#define APS512Mb_MODE_REG8_BURST_LEN_32B           0
+#else
+#define APS512Mb_MODE_REG8_BURST_LEN_32B           1
+#endif
 
 /* APS512Mb DFS for register access */
 #define APS512Mb_OSPI_REG_DFS                 16
-
-/* PSRAM Configuration Values */
-#define PSRAM_WAIT_CYCLES                      4
-#define PSRAM_DUAL_OCTAL_MODE_ENABLE           1
-#define PSRAM_OSPI_SS_LINE                     0
 
 /* HyperRAM XIP Base Address and Size */
 #define HYPERRAM_XIP_BASE                      0xA0000000
@@ -100,8 +103,12 @@
 #define OSPI_FRAME_SIZE_16BIT_THRESHOLD        0x0F
 
 /* AES RXDS Delay Configuration */
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
 #define AES_RXDS_DELAY_FALL_EDGE               15
 #define AES_RXDS_DELAY_RISE_EDGE               13
+#else
+#define AES_RXDS_DELAY_VALUE                   6
+#endif
 #define AES_RXDS_DELAY_RISE_SHIFT              8
 
 /* XIP Configuration */
@@ -154,6 +161,14 @@
 /* Data Bus Width */
 #define DATA_BUS_WIDTH_BITS                    32
 
+/* PSRAM Configuration Values */
+#define PSRAM_WAIT_CYCLES                      4
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
+#define PSRAM_DUAL_OCTAL_MODE_ENABLE           1
+#else
+#define PSRAM_DUAL_OCTAL_MODE_ENABLE           0
+#endif
+#define PSRAM_OSPI_SS_LINE                     0
 
 /**
  * @brief OSPI transfer helper structure for PSRAM operations
@@ -398,17 +413,16 @@ static void ospi_psram_set_dfs(ospi_cfg_t *ospi, uint8_t dfs)
 	ospi_enable(ospi);
 }
 
+
 /**
  * @brief Configure HyperRAM/PSRAM OSPI pins
  */
 static void ap_memory_pinmux_config(void)
 {
-	/* Pad control for data pins - need READ_ENABLE + SLEW_RATE_FAST + high drive strength */
 	uint32_t pad_ctrl_data = PADCTRL_READ_ENABLE | PADCTRL_SLEW_RATE_FAST | PADCTRL_OUTPUT_DRIVE_STRENGTH_12MA;
-	/* Pad control for clock/CS pins - NO READ_ENABLE, just SLEW_RATE_FAST + high drive strength */
 	uint32_t pad_ctrl_clk = PADCTRL_SLEW_RATE_FAST | PADCTRL_OUTPUT_DRIVE_STRENGTH_12MA;
 
-	/* Data pins PORT_2[0:7] - OSPI D0-D7 */
+	/* Data pins PORT_2[0:7] - OSPI D0-D7 (always configured) */
 	pinconf_set(PORT_2, PIN_0, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_2, PIN_1, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_2, PIN_2, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
@@ -418,7 +432,8 @@ static void ap_memory_pinmux_config(void)
 	pinconf_set(PORT_2, PIN_6, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_2, PIN_7, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 
-	/* Data pins PORT_16[0:7] - OSPI D8-D15 (for x16/dual-octal mode) */
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
+	/* Data pins PORT_16[0:7] - OSPI D8-D15 (for x16/dual-octal mode only) */
 	pinconf_set(PORT_16, PIN_0, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_16, PIN_1, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_16, PIN_2, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
@@ -427,14 +442,18 @@ static void ap_memory_pinmux_config(void)
 	pinconf_set(PORT_16, PIN_5, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_16, PIN_6, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
 	pinconf_set(PORT_16, PIN_7, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data);
+#endif
 
 	/* Clock and CS pins - NO READ_ENABLE (output only) */
 	pinconf_set(PORT_3, PIN_0, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_clk);  /* OSPI_SCLK */
+	pinconf_set(PORT_3, PIN_1, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_clk);  /* OSPI_SCLKN */
 	pinconf_set(PORT_3, PIN_2, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_clk);  /* OSPI_CS */
 
 	/* DQS/RWDS and control pins - need READ_ENABLE */
 	pinconf_set(PORT_1, PIN_6, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data); /* OSPI_DQS/RWDS0 */
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
 	pinconf_set(PORT_8, PIN_5, PINMUX_ALTERNATE_FUNCTION_1, pad_ctrl_data); /* OSPI_DQS/RWDS1 */
+#endif
 }
 
 /**
@@ -455,10 +474,14 @@ static void ospi_psram_controller_init(ospi_cfg_t *ospi_cfg)
 
 	/* Configure AES RXDS delay for DDR mode
 	 * Bits [7:0]: RXDS delay for falling edge
-	 * Bits [15:8]: RXDS delay for rising edge
+	 * Bits [15:8]: RXDS delay for rising edge (16-bit mode only)
 	 */
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
 	ospi_cfg->aes_regs->aes_rxds_delay = AES_RXDS_DELAY_FALL_EDGE |
-	                                     (AES_RXDS_DELAY_RISE_EDGE << AES_RXDS_DELAY_RISE_SHIFT);
+			(AES_RXDS_DELAY_RISE_EDGE << AES_RXDS_DELAY_RISE_SHIFT);
+#else
+	ospi_cfg->aes_regs->aes_rxds_delay = AES_RXDS_DELAY_VALUE;
+#endif
 
 	ospi_enable(ospi_cfg);
 }
@@ -491,9 +514,15 @@ static void ospi_psram_xip_mode_init(ospi_cfg_t *ospi_cfg, uint8_t wait_cycles)
 	regs->xip_write_wrap_inst = (APS512Mb_CMD_SYNC_WRITE << XIP_INST_SHIFT) | APS512Mb_CMD_SYNC_WRITE;
 	regs->xip_cnt_time_out = XIP_CNT_TIMEOUT_VALUE;
 
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
+	uint32_t xip_trans_type = SPI_TRANS_TYPE_FRF_DUAL_OCTAL;
+#else
+	uint32_t xip_trans_type = SPI_TRANS_TYPE_FRF_DEFINED;
+#endif
+
 	/* Configure XIP control register */
 	uint32_t xip_ctrl_val = (SPI_FRF_OCTAL << XIP_CTRL_FRF_POS)
-	                        | (SPI_TRANS_TYPE_FRF_DUAL_OCTAL << XIP_CTRL_TRANS_TYPE_POS)
+	                        | (xip_trans_type << XIP_CTRL_TRANS_TYPE_POS)
 	                        | (SPI_ADDR_L_32_BIT << XIP_CTRL_ADDR_L_POS)
 	                        | (SPI_INST_L_16_BIT << XIP_CTRL_INST_L_POS)
 	                        | (wait_cycles << XIP_CTRL_WAIT_CYCLES_POS)
@@ -508,7 +537,7 @@ static void ospi_psram_xip_mode_init(ospi_cfg_t *ospi_cfg, uint8_t wait_cycles)
 
 	/* Configure XIP write control register */
 	uint32_t xip_wr_ctrl_val = (SPI_FRF_OCTAL << XIP_WR_CTRL_FRF_POS)
-	                           | (SPI_TRANS_TYPE_FRF_DUAL_OCTAL << XIP_WR_CTRL_TRANS_TYPE_POS)
+	                           | (xip_trans_type << XIP_WR_CTRL_TRANS_TYPE_POS)
 	                           | (SPI_ADDR_L_32_BIT << XIP_WR_CTRL_ADDR_L_POS)
 	                           | (SPI_INST_L_16_BIT << XIP_WR_CTRL_INST_L_POS)
 	                           | (FEATURE_ENABLE << XIP_WR_CTRL_DDR_EN_POS)
@@ -577,7 +606,7 @@ int ap_memory_hyperram_init(void)
 	}
 
 	/* Configure device mode (MR8) - enable dual octal mode */
-	reg_value = (FEATURE_ENABLE << APS512Mb_MODE_REG8_BURST_LEN)
+	reg_value = (FEATURE_ENABLE << APS512Mb_MODE_REG8_BURST_LEN_32B)
 	             | (FEATURE_DISABLE << APS512Mb_MODE_REG8_BURST_TYPE)
 	             | (FEATURE_DISABLE << APS512Mb_MODE_REG8_RBX_READ_EN)
 	             | (PSRAM_DUAL_OCTAL_MODE_ENABLE << APS512Mb_MODE_REG8_TRANSFER_MODE);
@@ -586,7 +615,11 @@ int ap_memory_hyperram_init(void)
 	/* Verify MR8 configuration */
 	reg_value = aps512mb_read_reg(ospi_cfg, APS512Mb_MODE_REG8_ADDR,
 	                                APS512Mb_INIT_REG_READ_WAIT_CYCLES);
-	INFO("AP Memory: MR8 = 0x%02X (dual-octal mode)\n", reg_value);
+#if (AP_MEMORY_BUS_WIDTH == AP_MEMORY_BUS_WIDTH_16BIT)
+	INFO("AP Memory: MR8 = 0x%02X (dual-octal 16-bit mode)\n", reg_value);
+#else
+	INFO("AP Memory: MR8 = 0x%02X (octal 8-bit mode)\n", reg_value);
+#endif
 
 	/* Configure AES Address Control Shim for dual octal mode */
 	if (PSRAM_DUAL_OCTAL_MODE_ENABLE) {
