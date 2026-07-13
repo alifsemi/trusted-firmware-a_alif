@@ -21,6 +21,15 @@ ifeq "" "${AES_ENC_KEY}"
 $(error AES_EN is set to 1 but AES_ENC_KEY is empty.Set AES key in AES_ENC_KEY)
 endif
 endif
+
+# AP Memory bus width check - required when AP_HYPERRAM_EN is enabled
+ifeq "1" "${AP_HYPERRAM_EN}"
+ifeq "" "${AP_MEMORY_BUS_WIDTH}"
+$(error AP_MEMORY_BUS_WIDTH must be set when AP_HYPERRAM_EN=1. Use AP_MEMORY_BUS_WIDTH=8 or AP_MEMORY_BUS_WIDTH=16)
+endif
+$(eval $(call add_define,AP_MEMORY_BUS_WIDTH))
+endif
+
 CPPFLAGS		+= -DAES_ENC_KEY=\"${AES_ENC_KEY}\"
 
 BL32_SOURCES		+=	lib/xlat_tables/aarch32/xlat_tables.c	\
