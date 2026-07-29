@@ -70,12 +70,18 @@ override NEED_BL33	:=	no
 override RESET_TO_SP_MIN	:=	1
 override BL32_IN_XIP_MEM	:= 	1
 
-# Check for Linux kernel as a BL33 image by default
+# When the BL33 image is a Linux kernel, SP_MIN must pass it a preloaded
+# device tree. Other payloads (e.g. Zephyr) do not need one, so this is
+# opt-in via ARM_LINUX_KERNEL_AS_BL33=1.
+ARM_LINUX_KERNEL_AS_BL33	?=	0
 $(eval $(call add_define,ARM_LINUX_KERNEL_AS_BL33))
+
+ifeq (${ARM_LINUX_KERNEL_AS_BL33},1)
   ifndef ARM_PRELOADED_DTB_BASE
     $(error "ARM_PRELOADED_DTB_BASE must be set if ARM_LINUX_KERNEL_AS_BL33 is used.")
   endif
   $(eval $(call add_define,ARM_PRELOADED_DTB_BASE))
+endif
 
 # Adding TARGET_PLATFORM as a GCC define (-D option)
 $(eval $(call add_define,TARGET_PLATFORM_$(call uppercase,${TARGET_PLATFORM})))
