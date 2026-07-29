@@ -80,5 +80,25 @@ $(eval $(call add_define,ARM_LINUX_KERNEL_AS_BL33))
 # Adding TARGET_PLATFORM as a GCC define (-D option)
 $(eval $(call add_define,TARGET_PLATFORM_$(call uppercase,${TARGET_PLATFORM})))
 
-# Making Trusted SRAM Base as configurable
+# ----------------------------------------------------------------------------
+# BL32 relocation knobs.
+#
+# Each region is exposed as base + size so the image can be moved and resized
+# for different boot scenarios (Linux, Zephyr, custom MRAM/SRAM carve-outs)
+# without editing platform_def.h:
+#
+#   ALIF_BL32_XIP_BASE / _SIZE      code + rodata, executed in place from MRAM
+#   ALIF_TRUSTED_SRAM_BASE / _SIZE  data/bss/stack, run from Trusted SRAM
+#
+# Both bases must be 4 KB (page) aligned.
+# ----------------------------------------------------------------------------
+
+ALIF_BL32_XIP_BASE	?=	0x80002000
+ALIF_BL32_XIP_SIZE	?=	0x8000
+ALIF_TRUSTED_SRAM_BASE	?=	0x2000000
+ALIF_TRUSTED_SRAM_SIZE	?=	0x20000
+
+$(eval $(call add_define,ALIF_BL32_XIP_BASE))
+$(eval $(call add_define,ALIF_BL32_XIP_SIZE))
 $(eval $(call add_define,ALIF_TRUSTED_SRAM_BASE))
+$(eval $(call add_define,ALIF_TRUSTED_SRAM_SIZE))
