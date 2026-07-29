@@ -5,6 +5,13 @@
 #
 #
 
+# Flash / RAM driver and AES feature selection, all disabled by default.
+ISSI_HYPERRAM_EN	?=	0
+ISSI_FLASH_EN		?=	0
+MX_FLASH_EN		?=	0
+AP_HYPERRAM_EN		?=	0
+AES_EN			?=	0
+
 $(eval $(call add_define,ISSI_HYPERRAM_EN))
 $(eval $(call add_define,ISSI_FLASH_EN))
 $(eval $(call add_define,MX_FLASH_EN))
