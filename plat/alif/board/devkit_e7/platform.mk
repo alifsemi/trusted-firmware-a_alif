@@ -57,8 +57,10 @@ PLAT_INCLUDES		:=	-Iplat/alif/board/devkit_e7/common/include	\
 
 NEED_BL32		:=	yes
 
+# This platform ships only SP_MIN as its BL32, so default AARCH32_SP when the
+# build did not set it.
 ifeq (${AARCH32_SP},none)
-    $(error Variable AARCH32_SP has to be set for AArch32)
+    AARCH32_SP := sp_min
 endif
 
 # Include GICv2 driver files
