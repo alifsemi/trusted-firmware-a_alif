@@ -56,10 +56,12 @@ static void devkit_e7_clocks_init(void)
     mmio_write_32(UART_CTRL_REG, value | 0x0000FFFF);
     dsb();
 
-    /* Enable OSPI0 and OSPI1 clock */
+#if ALIF_SOC_E8
+    /* Enable OSPI0 and OSPI1 clock (E8-only register) */
     value = mmio_read_32(PERIPH_CLK_ENA);
     mmio_write_32(PERIPH_CLK_ENA, value | PERIPH_CLK_ENA_OSPI0_CKEN | PERIPH_CLK_ENA_OSPI1_CKEN);
     dsb();
+#endif /* ALIF_SOC_E8 */
 }
 
 /**
@@ -174,8 +176,6 @@ void plat_alif_sp_min_early_platform_setup(u_register_t arg0, u_register_t arg1,
  */
 void plat_alif_sp_min_platform_setup(void)
 {
-    uint32_t value;
-
 #if ISSI_HYPERRAM_EN
     /* Initialize ISS HyperRAM */
     iss_hyperram_init();
@@ -201,7 +201,10 @@ void plat_alif_sp_min_platform_setup(void)
     }
 #endif
 
-    /* set the NPU-HG in Non-secure, usermode state */
+#if ALIF_SOC_E8
+    /* set the NPU-HG in Non-secure, usermode state (E8-only registers) */
+    uint32_t value;
+
     value = mmio_read_32(NPU_HG_ADDR + NPUHG_RESET);
     value |= PENDING_CSL;
     value &= ~PENDING_CPL;
@@ -211,4 +214,5 @@ void plat_alif_sp_min_platform_setup(void)
     value |= POWER_Q_ENABLE;
     value |= CLOCK_Q_ENABLE;
     mmio_write_32((NPU_HG_ADDR + NPUHG_CMD), value);
+#endif /* ALIF_SOC_E8 */
 }
