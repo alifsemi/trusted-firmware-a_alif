@@ -18,6 +18,11 @@ $(eval $(call add_define,MX_FLASH_EN))
 $(eval $(call add_define,AES_EN))
 $(eval $(call add_define,AP_HYPERRAM_EN))
 
+# Ensemble E8 SoC selector. Used to select code blocks that are applicable
+# only on the E8 SoC. Enabled by default. set ALIF_SOC_E8=0 to build for E7.
+ALIF_SOC_E8		?=	1
+$(eval $(call add_define,ALIF_SOC_E8))
+
 ifeq "1" "${AES_EN}"
 ifneq "1" "${ISSI_FLASH_EN}"
 ifneq "1" "${MX_FLASH_EN}"
