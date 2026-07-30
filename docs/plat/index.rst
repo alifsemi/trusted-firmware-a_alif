@@ -6,6 +6,7 @@ Platform Ports
    :caption: Contents
    :hidden:
 
+   alif
    allwinner
    arm/index
    ast2700
