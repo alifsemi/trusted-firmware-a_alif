@@ -56,8 +56,8 @@ static void devkit_e7_clocks_init(void)
     mmio_write_32(UART_CTRL_REG, value | 0x0000FFFF);
     dsb();
 
-#if ALIF_SOC_E8
-    /* Enable OSPI0 and OSPI1 clock (E8-only register) */
+#if (ALIF_SOC_E8 == 1) || (ALIF_SOC_E8 == 0)
+    /* Enable OSPI0 and OSPI1 clock (E6 and E8) */
     value = mmio_read_32(PERIPH_CLK_ENA);
     mmio_write_32(PERIPH_CLK_ENA, value | PERIPH_CLK_ENA_OSPI0_CKEN | PERIPH_CLK_ENA_OSPI1_CKEN);
     dsb();
