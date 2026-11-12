@@ -22,6 +22,16 @@
 					DEVKIT_E7_MAX_CPUS_PER_CLUSTER *   \
 					DEVKIT_E7_MAX_PE_PER_CPU)
 
+/*
+ * Per-secondary mailbox words in secondary_cpu_flags[cpu - 1].
+ * CPU_ON posts GO so the parked core takes the SP_MIN warm path.
+ * SYSTEM_OFF posts CLUSTER_OFF so a parked core runs the local PPU-off
+ * sequence and writes ACK for the primary to observe.
+ */
+#define SECONDARY_CPU_GO_FLAG		0x000ADD
+#define SECONDARY_CLUSTER_OFF_FLAG	0x0000FF
+#define SECONDARY_PPU_OFF_ACK		0x0000F1
+
 #define BL32_BASE			ALIF_TRUSTED_SRAM_BASE
 #define BL32_LIMIT			UL(BL32_BASE + ALIF_TRUSTED_SRAM_SIZE)
 
@@ -89,6 +99,14 @@
 						SE_MHU0_RECV_ADDR,	\
 						MHU0_SIZE,              \
 						MT_DEVICE | MT_RW | MT_SECURE)
+
+/*
+ * APSS <-> M55-HE MHU0. Covered by DEVKIT_E7_MAP_DEVICE (0x1A000000).
+ * Channel 0 doorbells, same pairing as Linux mbox_m55_he_mhu0_tx/rx.
+ */
+#define ALIF_M55_MHU_TX_BASE		UL(0x1B040000)
+#define ALIF_M55_MHU_RX_BASE		UL(0x1B050000)
+#define ALIF_M55_MHU_ACK_TIMEOUT_US	UL(500000)
 
 #define NPU_HG_ADDR			(0x49042000)
 #define NPUHG_SIZE                      (0x2000)
