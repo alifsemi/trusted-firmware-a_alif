@@ -22,6 +22,15 @@
 					DEVKIT_E7_MAX_CPUS_PER_CLUSTER *   \
 					DEVKIT_E7_MAX_PE_PER_CPU)
 
+/*
+ * Per-secondary mailbox words in secondary_cpu_flags[cpu - 1].
+ * CPU_ON posts GO so the parked core takes the SP_MIN warm path.
+ * SYSTEM_OFF posts CLUSTER_OFF so a parked core that observes the flag
+ * runs the local PPU-off sequence. The primary waits on PPU_PWSR.
+ */
+#define SECONDARY_CPU_GO_FLAG		0x000ADD
+#define SECONDARY_CLUSTER_OFF_FLAG	0x0000FF
+
 #define BL32_BASE			ALIF_TRUSTED_SRAM_BASE
 #define BL32_LIMIT			UL(BL32_BASE + ALIF_TRUSTED_SRAM_SIZE)
 
@@ -89,6 +98,17 @@
 						SE_MHU0_RECV_ADDR,	\
 						MHU0_SIZE,              \
 						MT_DEVICE | MT_RW | MT_SECURE)
+
+/*
+ * APSS <-> M55-HE non-secure MHU1, channel 0.
+ * Covered by DEVKIT_E7_MAP_DEVICE (0x1A000000).
+ * The A32-side frames of pair 0 (0x1B040000 / 0x1B050000) and pair 1
+ * (0x1B060000 / 0x1B070000) are both in PD-8. Pair 0 is the secure
+ * doorbell. Pair 1 matches Linux mbox_m55_he_mhu1_tx/rx.
+ */
+#define ALIF_M55_MHU_TX_BASE		UL(0x1B060000)
+#define ALIF_M55_MHU_RX_BASE		UL(0x1B070000)
+#define ALIF_M55_MHU_ACK_TIMEOUT_US	UL(500000)
 
 #define NPU_HG_ADDR			(0x49042000)
 #define NPUHG_SIZE                      (0x2000)

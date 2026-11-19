@@ -49,7 +49,8 @@ BL32_SOURCES		+=	lib/xlat_tables/aarch32/xlat_tables.c	\
 				plat/alif/common/alif_common.c		\
 				lib/cpus/aarch32/cortex_a32.S		\
 				plat/alif/board/devkit_e7/se_service/services.c		\
-				plat/arm/board/corstone700/common/drivers/mhu/corstone700_mhu.c
+				plat/arm/board/corstone700/common/drivers/mhu/corstone700_mhu.c	\
+				plat/alif/common/alif_mhu.c
 
 PLAT_INCLUDES		:=	-Iplat/alif/board/devkit_e7/common/include	\
 				-Iinclude/plat/alif/common			\
@@ -83,6 +84,14 @@ override NEED_BL33	:=	no
 #TFA for ALIF platforms starts from BL32
 override RESET_TO_SP_MIN	:=	1
 override BL32_IN_XIP_MEM	:= 	1
+
+#
+# Bakery locks must live in normal memory with cache maintenance. PSCI CPU_OFF
+# runs cortex_a32_core_pwr_dwn(), which clears CPUECTLR.SMPEN before the
+# power-domain lock is released. Coherent bakery tickets then read as empty
+# and bakery_lock_release() asserts, so AFFINITY_INFO never reports OFF.
+#
+USE_COHERENT_MEM		:=	0
 
 # When the BL33 image is a Linux kernel, SP_MIN must pass it a preloaded
 # device tree. Other payloads (e.g. Zephyr) do not need one, so this is
